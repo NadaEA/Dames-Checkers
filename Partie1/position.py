@@ -115,4 +115,7 @@ if __name__ == '__main__':
     liste_positions_des_diagonales_basses = position_1.positions_diagonales_bas()
     assert liste_positions_des_diagonales_basses[0].ligne == 1 and liste_positions_des_diagonales_basses[0].colonne == 0
     assert liste_positions_des_diagonales_basses[1].ligne == 1 and liste_positions_des_diagonales_basses[1].colonne == 2
+
+    assert liste_positions_des_diagonales_basses[0] == Position(1,0)
+    assert liste_positions_des_diagonales_basses[1] == Position(1,2)
     print('Test unitaires passés avec succès!')
