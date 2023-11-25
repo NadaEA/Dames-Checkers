@@ -112,10 +112,27 @@ if __name__ == '__main__':
 
     #test_unitaire de positions_diagonales_bas
     position_1 = Position(0,1)
-    liste_positions_des_diagonales_basses = position_1.positions_diagonales_bas()
-    assert liste_positions_des_diagonales_basses[0].ligne == 1 and liste_positions_des_diagonales_basses[0].colonne == 0
-    assert liste_positions_des_diagonales_basses[1].ligne == 1 and liste_positions_des_diagonales_basses[1].colonne == 2
+    print(Position(1,0).positions_diagonales_bas())
+    assert Position(1,0).positions_diagonales_bas() == [Position(2,-1), Position(2,1)]
 
-    assert liste_positions_des_diagonales_basses[0] == Position(1,0)
-    assert liste_positions_des_diagonales_basses[1] == Position(1,2)
+
+    #test_unitaire de positions_diagonales_haut
+    position_1 = Position(0, 1)
+    liste_positions_des_diagonales_hautes = position_1.positions_diagonales_haut()
+    assert liste_positions_des_diagonales_hautes[0].ligne == -1 and liste_positions_des_diagonales_hautes[0].colonne == 0
+    assert liste_positions_des_diagonales_hautes[1].ligne == -1 and liste_positions_des_diagonales_hautes[1].colonne == 2
+
+    # test_unitaire de quatre_positions_diagonales
+    position_1 = Position(0, 1)
+    liste_positions_des_quatres_diagonales = position_1.quatre_positions_diagonales()
+    assert liste_positions_des_quatres_diagonales[2].ligne == 1 and liste_positions_des_quatres_diagonales[2].colonne == 0
+
+    # test_unitaire de quatre_positions_sauts
+    assert Position(2,2).quatre_positions_sauts()[1] == Position(0,4)
+    assert Position(2, 2).quatre_positions_sauts()[0] == Position(0,0)
+
+
+
+
+
     print('Test unitaires passés avec succès!')
