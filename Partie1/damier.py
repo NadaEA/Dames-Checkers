@@ -104,39 +104,36 @@ class Damier:
         """
         piece = self.recuperer_piece_a_position(position_piece)
 
-        #D'abord on vérifie que la position en question est occuppée par une pièce:
+        # D'abord on vérifie que la position en question est occuppée par une pièce:
         if piece is None:
             return False
-        #Ensuite on vérifie que la position cible est bien dans le damier:
+        # Ensuite on vérifie que la position cible est bien dans le damier:
         if not self.position_est_dans_damier(position_cible):
             return False
-        #Ensuite on s'assure que la position cible n'est pas déjà occuppée
+        # Ensuite on s'assure que la position cible n'est pas déjà occuppée
         piece_2 = self.recuperer_piece_a_position(position_cible)
         if piece_2 is not None:
             return False
 
-        #Maintenant on considère les différentes pièces possibles
+        # Maintenant on considère les différentes pièces possibles
 
-        #Cas où la pièce est un pion
+        # Cas où la pièce est un pion
         if piece.type_de_piece == "pion":
             if piece.couleur == "noir":
-                #Ici on s'assure que la position cible est un move légal
+                # Ici on s'assure que la position cible est un move légal
                 if position_cible not in position_piece.positions_diagonales_bas():
                     return False
-            #Ici on considère le cas où la pièce est un pion de couleur blanche
+            # Ici on considère le cas où la pièce est un pion de couleur blanche
             else:
                 if position_cible not in position_piece.positions_diagonales_haut():
                     return False
-        #Dans l'autre cas nous avons une dame
+        # Dans l'autre cas nous avons une dame
         else:
             if position_cible not in position_piece.quatre_positions_diagonales():
                 return False
 
-        #Si on a toujours pas retourné False, alors le move est légal
+        # Si on a toujours pas retourné False, alors le move est légal
         return True
-
-
-
 
     def piece_peut_sauter_vers(self, position_piece, position_cible):
         """Cette méthode détermine si une pièce (à la position reçue) peut sauter vers une certaine position cible.
@@ -162,11 +159,11 @@ class Damier:
         if piece is None:
             return False
 
-        #Ensuite on s'assure que la position cible est bien un saut possible
+        # Ensuite on s'assure que la position cible est bien un saut possible
         if position_cible not in position_piece.quatre_positions_sauts():
             return False
 
-        #Maintenant on peut déterminer la position de la pièce enemie (sur laquelle on saute)
+        # Maintenant on peut déterminer la position de la pièce enemie (sur laquelle on saute)
         ligne_position_piece = position_piece.ligne
         ligne_position_cible = position_cible.ligne
 
@@ -183,22 +180,19 @@ class Damier:
         else:
             colonne_position_enemie = colonne_position_piece + 1
 
-        #Donc la position de la piece enemie est:
+        # Donc la position de la piece enemie est:
         position_piece_enemie = Position(ligne_position_enemie, colonne_position_enemie)
 
-        #Maintenant on peut vérifier que la position enemie est occupée
+        # Maintenant on peut vérifier que la position enemie est occupée
         piece_enemie = self.recuperer_piece_a_position(position_piece_enemie)
         if piece_enemie is None:
             return False
-        #Finalement on s'assure que la piece enemie est bien une piece adverse
-        if (piece.type_de_piece == "noir" and piece_enemie.type_de_piece == "noir") or (piece.type_de_piece == "blanc" and piece_enemie.type_de_piece == "blanc"):
+        # Finalement on s'assure que la piece enemie est bien une piece adverse
+        if (piece.type_de_piece == "noir" and piece_enemie.type_de_piece == "noir") or (
+                piece.type_de_piece == "blanc" and piece_enemie.type_de_piece == "blanc"):
             return False
-        #Si on a pas return False by now, on peut return True
+        # Si on a pas return False by now, on peut return True
         return True
-
-
-
-
 
     def piece_peut_se_deplacer(self, position_piece):
         """Vérifie si une pièce à une certaine position a la possibilité de se déplacer (sans faire de saut).
@@ -215,17 +209,15 @@ class Damier:
         """
         piece = self.recuperer_piece_a_position(position_piece)
 
-        #Déterminons les 4 positions possibles pour la piece:
+        # Déterminons les 4 positions possibles pour la piece:
         liste_positions_possibles = position_piece.quatre_positions_diagonales()
         peut_se_deplacer = False
-        #Si une des positions possibles est disponible on return True
+        # Si une des positions possibles est disponible on return True
         for elem in liste_positions_possibles:
             if self.piece_peut_se_deplacer_vers(position_piece, elem):
                 peut_se_deplacer = True
 
         return peut_se_deplacer
-
-
 
     def piece_peut_faire_une_prise(self, position_piece):
         """Vérifie si une pièce à une certaine position a la possibilité de faire une prise.
@@ -241,7 +233,17 @@ class Damier:
             bool: True si une pièce est à la position reçue et celle-ci peut faire une prise. False autrement.
 
         """
-        #TODO: À compléter
+        piece = self.recuperer_piece_a_position(position_piece)
+
+        # Déterminons les 4 positions possibles pour la piece:
+        liste_positions_possibles = position_piece.quatre_positions_sauts()
+        peut_faire_une_prise = False
+        # Si une des positions possibles est disponible on return True
+        for element in liste_positions_possibles:
+            if self.piece_peut_sauter_vers(position_piece, element):
+                peut_faire_une_prise = True
+
+        return peut_faire_une_prise
 
     def piece_de_couleur_peut_se_deplacer(self, couleur):
         """Vérifie si n'importe quelle pièce d'une certaine couleur reçue en argument a la possibilité de se déplacer
@@ -255,7 +257,13 @@ class Damier:
         Returns:
             bool: True si une pièce de la couleur reçue peut faire un déplacement standard, False autrement.
         """
-        #TODO: À compléter
+
+        for position in self.cases:
+            piece = self.recuperer_piece_a_position(position)
+            if piece.couleur == couleur:
+                if self.piece_peut_se_deplacer(position):
+                    return True
+        return False
 
     def piece_de_couleur_peut_faire_une_prise(self, couleur):
         """Vérifie si n'importe quelle pièce d'une certaine couleur reçue en argument a la possibilité de faire un
@@ -270,7 +278,14 @@ class Damier:
         Returns:
             bool: True si une pièce de la couleur reçue peut faire un saut (une prise), False autrement.
         """
-        #TODO: À compléter
+
+        for position in self.cases:
+            piece = self.recuperer_piece_a_position(position)
+            if piece.couleur == couleur:
+                if self.piece_peut_faire_une_prise(position):
+                    return True
+
+        return False
 
     def deplacer(self, position_source, position_cible):
         """Effectue le déplacement sur le damier. Si le déplacement est valide, on doit mettre à jour le dictionnaire
@@ -278,7 +293,7 @@ class Damier:
         été prise).
 
         Cette méthode doit également:
-        - Promouvoir un pion en dame si celui-ci atteint l'autre extrémité du plateau.
+        - Promouvoir un pion en dame si celui-ci atteint l'autre extrémité du plateau. #Pas sur de comprendre (Bamba)
         - Retourner un message indiquant "ok", "prise" ou "erreur".
 
         ATTENTION: Si le déplacement est effectué, cette méthode doit retourner "ok" si aucune prise n'a été faite,
@@ -295,9 +310,31 @@ class Damier:
                 "erreur" autrement.
 
         """
-        #TODO: À compléter
+        # TODO: À compléter
+        # On vérifie que la position source est bien occupée
+        if self.recuperer_piece_a_position(position_source) is not None:
 
+            # On vérifie que la position cible est bien dans le damier
+            if self.position_est_dans_damier(position_cible):
 
+                # On vérifie que la position cible est bien vide
+                if self.recuperer_piece_a_position(position_cible) is None:
+
+                    # On vérifie que le déplacer est une prise
+                    if self.piece_peut_sauter_vers(position_source, position_cible):
+
+                        self.cases[position_cible] = self.cases[position_source]
+                        del self.cases[position_source]
+                        return "prise"
+                    else:
+                        # On vérifie que c'est  un déplacer sans prise
+                        if self.piece_peut_se_deplacer_vers(position_source, position_cible):
+
+                            self.cases[position_cible] = self.cases[position_source]
+                            del self.cases[position_source]
+                            return "ok"
+
+        return "erreur"
     def __repr__(self):
         """Cette méthode spéciale permet de modifier le comportement d'une instance de la classe Damier pour
         l'affichage. Faire un print(un_damier) affichera le damier à l'écran.
@@ -305,10 +342,10 @@ class Damier:
         """
         s = " +-0-+-1-+-2-+-3-+-4-+-5-+-6-+-7-+\n"
         for i in range(0, 8):
-            s += str(i)+"| "
+            s += str(i) + "| "
             for j in range(0, 8):
                 if Position(i, j) in self.cases:
-                    s += str(self.cases[Position(i, j)])+" | "
+                    s += str(self.cases[Position(i, j)]) + " | "
                 else:
                     s += "  | "
             s += "\n +---+---+---+---+---+---+---+---+\n"
@@ -323,66 +360,63 @@ if __name__ == "__main__":
 
     # TODO: À compléter
 
-    #tests unitaires de position_est_dans_damier
-    position_1 = Position(-2,-3)
+    # tests unitaires de position_est_dans_damier
+    position_1 = Position(-2, -3)
     assert un_damier.position_est_dans_damier(position_1) == False
 
-    position_2 = Position(0,8)
+    position_2 = Position(0, 8)
     assert un_damier.position_est_dans_damier(position_2) == False
 
-    position_3 = Position(0,7)
+    position_3 = Position(0, 7)
     assert un_damier.position_est_dans_damier(position_3) == True
 
-
-    #tests unitaires de piece_peut_se_deplacer_vers
-    #S'il n'y a pas de piece a la position_piece
-    position_1 = Position(1,1)
-    position_2 = Position(2,2)
+    # tests unitaires de piece_peut_se_deplacer_vers
+    # S'il n'y a pas de piece a la position_piece
+    position_1 = Position(1, 1)
+    position_2 = Position(2, 2)
     valeur_bool = un_damier.piece_peut_se_deplacer_vers(position_1, position_2)
     assert valeur_bool == False
 
-    #Si la position_cible n'est pas dans le damier
-    position_1 = Position(2,1)
-    position_2 = Position(0,8)
-    assert un_damier.piece_peut_se_deplacer_vers(position_1, position_2) == False
-
-    #Si la position cible est déjà occupée
+    # Si la position_cible n'est pas dans le damier
     position_1 = Position(2, 1)
-    position_2 = Position(5,4)
+    position_2 = Position(0, 8)
     assert un_damier.piece_peut_se_deplacer_vers(position_1, position_2) == False
 
-    #Si on essaie de se déplacer dans une position qui est trop loin (pas dans les diagonales immédiates
+    # Si la position cible est déjà occupée
+    position_1 = Position(2, 1)
+    position_2 = Position(5, 4)
+    assert un_damier.piece_peut_se_deplacer_vers(position_1, position_2) == False
+
+    # Si on essaie de se déplacer dans une position qui est trop loin (pas dans les diagonales immédiates
     position_1 = Position(5, 2)
     position_2 = Position(3, 4)
     assert un_damier.piece_peut_se_deplacer_vers(position_1, position_2) == False
 
-    #Finalement faut quand même que ça passe si c'est correct
+    # Finalement faut quand même que ça passe si c'est correct
     position_1 = Position(2, 1)
     position_2 = Position(3, 2)
-    position_3 = Position(3,0)
+    position_3 = Position(3, 0)
     assert un_damier.piece_peut_se_deplacer_vers(position_1, position_2) == True
     assert un_damier.piece_peut_se_deplacer_vers(position_1, position_3) == True
 
-
-    #Tests unitaire de piece_peut_sauter_vers
-    #Si notre position est pas occupée
-    position_1 = Position(1,1)
-    position_2 = Position(3,3)
+    # Tests unitaire de piece_peut_sauter_vers
+    # Si notre position est pas occupée
+    position_1 = Position(1, 1)
+    position_2 = Position(3, 3)
     assert un_damier.piece_peut_sauter_vers(position_1, position_2) == False
 
-    #Si c'est pas un saut possible
+    # Si c'est pas un saut possible
     position_1 = Position(2, 1)
     position_2 = Position(5, 4)
     assert un_damier.piece_peut_sauter_vers(position_1, position_2) == False
 
-    #Si c'est pas une pièce adverse
+    # Si c'est pas une pièce adverse
     position_1 = Position(0, 1)
     position_2 = Position(3, 2)
     assert un_damier.piece_peut_sauter_vers(position_1, position_2) == False
     ####Probablement faire d'autres tests quand on pourra bouger!#########
 
-
-    #Tests unitaires de piece_peut_se_deplacer
+    # Tests unitaires de piece_peut_se_deplacer
     position_1 = Position(0, 1)
     assert un_damier.piece_peut_se_deplacer(position_1) == False
 
@@ -395,7 +429,58 @@ if __name__ == "__main__":
     position_1 = Position(5, 6)
     assert un_damier.piece_peut_se_deplacer(position_1) == True
 
-    print('Test unitaires passés avec succès!')
+    # Tests unitaires de piece_peut_faire_une_prise
+    position_1 = Position(1, 1)
+    assert un_damier.piece_peut_faire_une_prise(position_1) == False
+    bool = un_damier.piece_peut_faire_une_prise(Position(2, 1))
+    assert bool == True
+    assert un_damier.piece_peut_faire_une_prise(Position(2, 3)) == True
+    assert un_damier.piece_peut_faire_une_prise(Position(2, 5)) == True
+    assert not un_damier.piece_peut_faire_une_prise(Position(1, 0)) == False
+
+    # Tests unitaires de piece_de_couleur_peut_se_deplacer
+    assert un_damier.piece_de_couleur_peut_se_deplacer("blanc") == True
+    assert un_damier.piece_de_couleur_peut_se_deplacer("noir") == True
+    assert not un_damier.piece_de_couleur_peut_se_deplacer("blanc") == False
+
+    # Tests unitaires de piece_de_couleur_peut_faire_une_prise
+    assert un_damier.piece_de_couleur_peut_faire_une_prise("blanc") == True
+    assert un_damier.piece_de_couleur_peut_faire_une_prise("noir") == True
+    assert not un_damier.piece_de_couleur_peut_faire_une_prise("blanc") == False
+
+
+
+    # Tests unitaires de deplacer
+    # Si la position source est vide
+    position_1 = Position(1, 1)
+    position_2 = Position(2, 2)
+    assert un_damier.deplacer(position_1, position_2) == "erreur"
+
+    # Si la position cible est pas dans le damier
+    position_1 = Position(2, 1)
+    position_2 = Position(0, 8)
+    assert un_damier.deplacer(position_1, position_2) == "erreur"
+
+    # Si la position cible est déjà occupée
+    position_1 = Position(2, 1)
+    position_2 = Position(5, 4)
+    assert un_damier.deplacer(position_1, position_2) == "erreur"
+
+    # Si le déplacement est une prise
+    position_1 = Position(2, 1)
+    position_2 = Position(4, 3)
+    assert not un_damier.deplacer(position_1, position_2) == "prise"
+
+
+    #Si le déplacement est  sans prise
+    position_1 = Position(2, 1)
+    position_2 = Position(3, 2)
+    assert un_damier.deplacer(position_1, position_2) == "ok"
+
+
+    print('Test unitaires passés avec succès !')
+
+
 
     # NOTEZ BIEN: Pour vous aider lors du développement, affichez le damier!
     print(un_damier)
