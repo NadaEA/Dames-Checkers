@@ -112,7 +112,6 @@ if __name__ == '__main__':
 
     #test_unitaire de positions_diagonales_bas
     position_1 = Position(0,1)
-    print(Position(1,0).positions_diagonales_bas())
     assert Position(1,0).positions_diagonales_bas() == [Position(2,-1), Position(2,1)]
 
 

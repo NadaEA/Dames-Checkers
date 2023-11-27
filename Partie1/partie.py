@@ -2,6 +2,8 @@
 
 from tp3.Partie1.damier import Damier
 from tp3.Partie1.position import Position
+from tp3.Partie1.position import Piece
+
 
 
 class Partie:
@@ -57,6 +59,36 @@ class Partie:
                  deuxième élément est un message d'erreur (ou une chaîne vide s'il n'y a pas d'erreur).
 
         """
+        # On vérifie que la position contient une pièce, et on stocke dans i l'index du dictionnaire si elle y est
+        message_erreur = ""
+        i = 0
+        validite = True
+        for keys in Damier.cases:
+            if position_source == Damier.cases[i]:
+                validite = True
+                break
+            else:
+                validite = False
+                i += 1
+                message_erreur = "La position ne contient aucune pièce!"
+                return validite, message_erreur
+
+        # On compare la couleur du joueur courant avec la couleur de la pièce pour déterminer la validité
+        if Damier.cases.value[i] != self.couleur_joueur_courant:
+            validite = False
+            message_erreur = "Cette pièce ne t'appartient pas!"
+            return validite, message_erreur
+
+        # On vérifie que si le joueur est obligé de jouer une pièce, qu'il a sélectionné la bonne pièce
+        if self.doit_prendre:
+            if not Damier.piece_peut_faire_une_prise(position_source):
+                validite = False
+                message_erreur = "Une autre pièce peut faire une prise, fais attention!"
+                return validite, message_erreur
+
+        return validite, message_erreur
+
+
         #TODO: À compléter
 
     def position_cible_valide(self, position_cible):
