@@ -1,8 +1,8 @@
 # Auteurs: À compléter
 
-from tp3.Partie1.damier import Damier
-from tp3.Partie1.position import Position
-from tp3.Partie1.position import Piece
+from damier import Damier
+from position import Position
+from piece import Piece
 
 
 
@@ -63,25 +63,38 @@ class Partie:
         message_erreur = ""
         i = 0
         validite = True
-        for keys in Damier.cases:
-            if position_source == Damier.cases[i]:
+        # for keys in Damier.cases:
+        #On doit utiliser l'objet de la classe Damier qu'on instantie à l'intérieur de la classe Partie, sinon si tu essaie d'accéder à la classe Damier
+        #à travers le nom de la classe et pas un objet de la classe damier, tu reçois une erreur comme quoi les attributs sont pas trouvables (parce qu'ils
+        #ont pas été crées parce qu'on a pas d'instance de damier dans ce cas là
+        for keys in self.damier.cases:
+            # if position_source == Damier.cases[i]:
+            #On peut pas accéder à un dictionnaire directement avec un index, c'est juste avec des clés ou valeurs
+            if position_source == keys:
                 validite = True
                 break
             else:
                 validite = False
                 i += 1
                 message_erreur = "La position ne contient aucune pièce!"
-                return validite, message_erreur
+                #return validite, message_erreur
+                #Avec un return ici, ça veut dire que si le premier match n'est pas ce qu'on veut, la fonction retourne sans checker tous les autres
+
+        #Ici c'est 24 parce que on a 24 pieces!
+        if i == 24 and validite == False:
+            return validite, "La position ne contient aucune pièce!"
 
         # On compare la couleur du joueur courant avec la couleur de la pièce pour déterminer la validité
-        if Damier.cases.value[i] != self.couleur_joueur_courant:
+        # if Damier.cases.value[i] != self.couleur_joueur_courant:
+        #Même chose qu'en haut, on peut pas accéder à des valeurs d'un dictionnaire avec un index
+        if self.damier.cases[position_source].couleur != self.couleur_joueur_courant:
             validite = False
             message_erreur = "Cette pièce ne t'appartient pas!"
             return validite, message_erreur
 
         # On vérifie que si le joueur est obligé de jouer une pièce, qu'il a sélectionné la bonne pièce
         if self.doit_prendre:
-            if not Damier.piece_peut_faire_une_prise(position_source):
+            if not self.damier.piece_peut_faire_une_prise(position_source):
                 validite = False
                 message_erreur = "Une autre pièce peut faire une prise, fais attention!"
                 return validite, message_erreur
@@ -102,11 +115,32 @@ class Partie:
                 a pas d'erreur).
 
         """
-        #TODO: À compléter
+
+        #On vérifie si la piece peut se déplacer
+        peut_se_deplacer = self.damier.piece_peut_se_deplacer(self.position_source_selectionnee)
+        if not peut_se_deplacer:
+            return False,"La pièce à cette position ne peut pas se déplacer!"
+
+        #On vérifie si la pièce à la position source peut se déplacer vers la position cible
+        peut_se_deplacer_vers = self.damier.piece_peut_se_deplacer_vers(self.position_source_selectionnee, position_cible)
+        if not peut_se_deplacer_vers:
+            return False, "La pièce à cette position ne peut pas se déplacer vers la position cible!"
+
+        #On vérifie que la position sélectionnée est bien la position sélectionnée forcée si celle-ci n'est pas None
+        # if self.position_source_forcee is not None:
+        #     if self.position_source_selectionnee != self.position_source_forcee:
+
+
+        #On vérifie que le joueur ne doit pas prendre de pièce
+        if self.doit_prendre:
+            if self.position_source_forcee is not None:
+                if self.position_source_selectionnee != self.position_source_forcee:
+                    return False, ""
+
 
     def demander_positions_deplacement(self):
         """Demande à l'utilisateur les positions sources et cible, et valide ces positions. Cette méthode doit demander
-        les positions à l'utilisateur tant que celles-ci sont invalides.
+        les positions à l'utilisateur tant que celles-ci sont invalides.Qu
 
         Cette méthode ne doit jamais planter, peu importe ce que l'utilisateur entre.
 
@@ -173,3 +207,12 @@ class Partie:
             return "blanc"
 
 
+if __name__ == "__main__":
+    une_partie = Partie()
+    position = Position(1,0)
+    assert une_partie.position_source_valide(position) == (False, "Cette pièce ne t'appartient pas!")
+
+    position_2 = Position(0,2)
+    assert une_partie.position_source_valide(position_2) == (False, "La position ne contient aucune pièce!")
+
+    print("Tests réussis!")
