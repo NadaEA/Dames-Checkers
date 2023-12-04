@@ -148,7 +148,22 @@ class Partie:
             Position, Position: Un couple de deux positions (source et cible).
 
         """
-        #TODO: À compléter
+        #On demande la position source
+        position_source = input("Entrez la position source: ")
+        position_source_valide= self.position_source_valide(position_source)
+        while not position_source_valide:
+            position_source = input("Entrez la position source: ")
+            position_source_valide = self.position_source_valide(position_source)
+
+        #On demande la position cible
+        position_cible = input("Entrez la position cible: ")
+        position_cible_valide = self.position_cible_valide(position_cible)
+        while not position_cible_valide:
+            position_cible = input("Entrez la position cible: ")
+            position_cible_valide = self.position_cible_valide(position_cible)
+
+        #On retourne les deux positions
+        return position_source, position_cible
 
     def tour(self):
         """Cette méthode effectue le tour d'un joueur, et doit effectuer les actions suivantes:
