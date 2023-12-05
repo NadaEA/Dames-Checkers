@@ -121,7 +121,7 @@ class Partie:
         elif self.damier.piece_peut_se_deplacer_vers(self.position_source_selectionnee, position_cible):#La pièce ne peut pas faire une prise, elle peut se déplacer?
             return True, "Le déplacement est valide"
         else:#La pièce ne peut ni faire une prise, ni se déplacer vers la position cible
-            return False, "La pièce ne peut pas se déplacer"
+            return False, "La pièce ne peut pas se déplacer vers cette position"
 
 
     def demander_positions_deplacement(self):
@@ -230,7 +230,7 @@ class Partie:
 
 if __name__ == "__main__":
     une_partie = Partie()
-    le_damier = Damier()
+    le_damier = une_partie.damier
     print(le_damier)
 
     # Tests unitaires
