@@ -231,16 +231,18 @@ class Partie:
 if __name__ == "__main__":
     une_partie = Partie()
     le_damier = Damier()
+    print(le_damier)
+
+    # Tests unitaires
     position = Position(1,0)
     assert une_partie.position_source_valide(position) == (False, "Cette pièce ne t'appartient pas!")
 
     position_2 = Position(0,2)
     assert une_partie.position_source_valide(position_2) == (False, "La position ne contient aucune pièce!")
     une_partie.position_source_selectionnee = Position(1,0)
-    print(le_damier)
-    positions = une_partie.demander_positions_deplacement()   # Input 1, 1, 2, 2, 3,2
-    print(positions)
-    assert positions ==  (Position(1,1), Position(2,2))
+
+    positions = une_partie.demander_positions_deplacement()   # Input 5, 0, 4, 1
+    assert positions == (Position(5,0), Position(4,1))
 
 
 

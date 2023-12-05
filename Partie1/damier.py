@@ -155,7 +155,7 @@ class Damier:
         """
         piece = self.recuperer_piece_a_position(position_piece)
 
-        # D'abord on vérifie que la position en question est occuppée par une pièce:
+        # D'abord on vérifie que la position en question est occupée par une pièce:
         if piece is None:
             return False
 
@@ -188,8 +188,8 @@ class Damier:
         if piece_enemie is None:
             return False
         # Finalement on s'assure que la piece enemie est bien une piece adverse
-        if (piece.type_de_piece == "noir" and piece_enemie.type_de_piece == "noir") or (
-                piece.type_de_piece == "blanc" and piece_enemie.type_de_piece == "blanc"):
+        if (piece.couleur == "noir" and piece_enemie.couleur == "noir") or (
+                piece.couleur == "blanc" and piece_enemie.couleur == "blanc"):
             return False
         # Si on a pas return False by now, on peut return True
         return True
