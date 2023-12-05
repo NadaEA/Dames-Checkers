@@ -116,26 +116,18 @@ class Partie:
 
         """
 
-        #On vérifie si la piece peut se déplacer
-        peut_se_deplacer = self.damier.piece_peut_se_deplacer(self.position_source_selectionnee)
-        if not peut_se_deplacer:
-            return False,"La pièce à cette position ne peut pas se déplacer!"
-
-        #On vérifie si la pièce à la position source peut se déplacer vers la position cible
-        peut_se_deplacer_vers = self.damier.piece_peut_se_deplacer_vers(self.position_source_selectionnee, position_cible)
-        if not peut_se_deplacer_vers:
-            return False, "La pièce à cette position ne peut pas se déplacer vers la position cible!"
-
-        #On vérifie que la position sélectionnée est bien la position sélectionnée forcée si celle-ci n'est pas None
-        # if self.position_source_forcee is not None:
-        #     if self.position_source_selectionnee != self.position_source_forcee:
-
-
-        #On vérifie que le joueur ne doit pas prendre de pièce
-        if self.doit_prendre:
-            if self.position_source_forcee is not None:
-                if self.position_source_selectionnee != self.position_source_forcee:
-                    return False, ""
+        #Il y a deux possibilités généralement: un déplacement sans prise ou un déplacement avec prise (un saut)
+        #On vérifie d'abord que la contrainte de prise obligatoire est respectée (vérifie les sauts)
+        #Ensuite si ce n'est pas un saut, on regarde si le déplacement est valide
+        if self.damier.piece_peut_faire_une_prise(self.position_source_selectionnee):#Est-ce que la pièce peut faire une prise?
+            if self.damier.piece_peut_sauter_vers(self.position_source_selectionnee, position_cible):#La pièce peut faire une prise, est-ce que la position cible est une prise possible?
+                return True, "La position cible est valide est c'est une prise"
+            else:
+                return False, "La pièce doit prendre une pièce mais la position cible n'est pas valide"
+        elif self.damier.piece_peut_se_deplacer_vers(self.position_source_selectionnee, position_cible):#La pièce ne peut pas faire une prise, elle peut se déplacer?
+            return True, "Le déplacement est valide"
+        else:#La pièce ne peut ni faire une prise, ni se déplacer vers la position cible
+            return False, "La pièce ne peut pas se déplacer"
 
 
     def demander_positions_deplacement(self):
