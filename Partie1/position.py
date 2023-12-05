@@ -26,8 +26,8 @@ class Position:
             colonne (int): La colonne à considérer dans l'instance de Position.
 
         """
-        self.ligne = int(ligne)
-        self.colonne = int(colonne)
+        self.ligne = ligne
+        self.colonne = colonne
 
     def positions_diagonales_bas(self):
         """Retourne une liste contenant les deux positions diagonales bas à partir de la position actuelle.
