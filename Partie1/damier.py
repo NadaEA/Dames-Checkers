@@ -215,6 +215,7 @@ class Damier:
         # Si une des positions possibles est disponible on return True
         for elem in liste_positions_possibles:
             if self.piece_peut_se_deplacer_vers(position_piece, elem):
+                print(peut_se_deplacer)
                 peut_se_deplacer = True
 
         return peut_se_deplacer
@@ -242,7 +243,6 @@ class Damier:
         for element in liste_positions_possibles:
             if self.piece_peut_sauter_vers(position_piece, element):
                 peut_faire_une_prise = True
-
         return peut_faire_une_prise
 
     def piece_de_couleur_peut_se_deplacer(self, couleur):

@@ -68,25 +68,19 @@ class Partie:
         #à travers le nom de la classe et pas un objet de la classe damier, tu reçois une erreur comme quoi les attributs sont pas trouvables (parce qu'ils
         #ont pas été crées parce qu'on a pas d'instance de damier dans ce cas là
         for keys in self.damier.cases:
-            # if position_source == Damier.cases[i]:
-            #On peut pas accéder à un dictionnaire directement avec un index, c'est juste avec des clés ou valeurs
             if position_source == keys:
                 validite = True
+                message_erreur = ""
                 break
             else:
                 validite = False
                 i += 1
                 message_erreur = "La position ne contient aucune pièce!"
-                #return validite, message_erreur
-                #Avec un return ici, ça veut dire que si le premier match n'est pas ce qu'on veut, la fonction retourne sans checker tous les autres
 
-        #Ici c'est 24 parce que on a 24 pieces!
         if i == 24 and validite == False:
             return validite, "La position ne contient aucune pièce!"
 
         # On compare la couleur du joueur courant avec la couleur de la pièce pour déterminer la validité
-        # if Damier.cases.value[i] != self.couleur_joueur_courant:
-        #Même chose qu'en haut, on peut pas accéder à des valeurs d'un dictionnaire avec un index
         if self.damier.cases[position_source].couleur != self.couleur_joueur_courant:
             validite = False
             message_erreur = "Cette pièce ne t'appartient pas!"
@@ -121,7 +115,7 @@ class Partie:
         #Ensuite si ce n'est pas un saut, on regarde si le déplacement est valide
         if self.damier.piece_peut_faire_une_prise(self.position_source_selectionnee):#Est-ce que la pièce peut faire une prise?
             if self.damier.piece_peut_sauter_vers(self.position_source_selectionnee, position_cible):#La pièce peut faire une prise, est-ce que la position cible est une prise possible?
-                return True, "La position cible est valide est c'est une prise"
+                return True, "La position cible est valide et c'est une prise"
             else:
                 return False, "La pièce doit prendre une pièce mais la position cible n'est pas valide"
         elif self.damier.piece_peut_se_deplacer_vers(self.position_source_selectionnee, position_cible):#La pièce ne peut pas faire une prise, elle peut se déplacer?
@@ -141,18 +135,32 @@ class Partie:
 
         """
         #On demande la position source
-        position_source = input("Entrez la position source: ")
+        ligne_source = int(input("Entrez la ligne source: "))
+        colonne_source = int(input("Entrez la colonne source: "))
+        position_source = Position(ligne_source, colonne_source)
+        self.position_source_selectionnee = position_source
         position_source_valide= self.position_source_valide(position_source)
-        while not position_source_valide:
-            position_source = input("Entrez la position source: ")
+        print(self.position_source_valide(position_source)[1])
+        while position_source_valide[0] == False :
+            ligne_source = int(input("Entrez la ligne source: "))
+            colonne_source = int(input("Entrez la colonne source: "))
+            position_source = Position(ligne_source, colonne_source)
+            self.position_source_selectionnee = position_source
             position_source_valide = self.position_source_valide(position_source)
+            print(self.position_source_valide(position_source)[1])
 
         #On demande la position cible
-        position_cible = input("Entrez la position cible: ")
+        ligne_cible = int(input("Entrez la ligne cible: "))
+        colonne_cible = int(input("Entrez la colonne cible: "))
+        position_cible = Position(ligne_cible, colonne_cible)
         position_cible_valide = self.position_cible_valide(position_cible)
-        while not position_cible_valide:
-            position_cible = input("Entrez la position cible: ")
+        print(self.position_cible_valide(position_cible)[1])
+        while not position_cible_valide[0]:
+            ligne_cible = input("Entrez la ligne cible: ")
+            colonne_cible = input("Entrez la colonne cible: ")
+            position_cible = Position(ligne_cible, colonne_cible)
             position_cible_valide = self.position_cible_valide(position_cible)
+            print(self.position_cible_valide(position_cible)[1])
 
         #On retourne les deux positions
         return position_source, position_cible
@@ -188,9 +196,15 @@ class Partie:
             print("")
 
         # Demander les positions
+
+        #coup = self.demander_positions_deplacement()
+
         # TODO: À compléter
 
         # Effectuer le déplacement (à l'aide de la méthode du damier appropriée)
+
+
+
         # TODO: À compléter
 
         # Mettre à jour les attributs de la classe
@@ -216,10 +230,18 @@ class Partie:
 
 if __name__ == "__main__":
     une_partie = Partie()
+    le_damier = Damier()
     position = Position(1,0)
     assert une_partie.position_source_valide(position) == (False, "Cette pièce ne t'appartient pas!")
 
     position_2 = Position(0,2)
     assert une_partie.position_source_valide(position_2) == (False, "La position ne contient aucune pièce!")
+    une_partie.position_source_selectionnee = Position(1,0)
+    print(le_damier)
+    positions = une_partie.demander_positions_deplacement()   # Input 1, 1, 2, 2, 3,2
+    print(positions)
+    assert positions ==  (Position(1,1), Position(2,2))
+
+
 
     print("Tests réussis!")
