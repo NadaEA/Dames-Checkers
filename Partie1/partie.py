@@ -1,8 +1,8 @@
 # Auteurs: À compléter
 
-from damier import Damier
-from position import Position
-from piece import Piece
+from Partie1.damier import Damier
+from Partie1.position import Position
+from Partie1.piece import Piece
 
 
 class Partie:

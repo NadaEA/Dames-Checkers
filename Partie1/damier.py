@@ -1,7 +1,7 @@
 # Auteurs: À compléter
 
-from piece import Piece
-from position import Position
+from Partie1.piece import Piece
+from Partie1.position import Position
 
 
 

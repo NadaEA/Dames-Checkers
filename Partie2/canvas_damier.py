@@ -1,7 +1,7 @@
 # Auteurs: Équipe IFT-1004
 
 from tkinter import Tk, Canvas
-from tp3.Partie1.position import Position
+from Partie1.position import Position
 
 
 class CanvasDamier(Canvas):
