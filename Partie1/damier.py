@@ -320,21 +320,51 @@ class Damier:
                 # On vérifie que la position cible est bien vide
                 if self.recuperer_piece_a_position(position_cible) is None:
 
-                    # On vérifie que le déplacer est une prise
+                    # On vérifie que le déplacement est une prise
                     verification = self.piece_peut_sauter_vers(position_source, position_cible)
                     if verification:
+                        position_enemie = self.determiner_position_enemie(position_source, position_cible)
+                        del self.cases[position_enemie]
                         self.cases[position_cible] = self.cases[position_source]
                         del self.cases[position_source]
                         return "prise"
                     else:
                         # On vérifie que c'est  un déplacer sans prise
                         if self.piece_peut_se_deplacer_vers(position_source, position_cible):
-
                             self.cases[position_cible] = self.cases[position_source]
                             del self.cases[position_source]
                             return "ok"
 
         return "erreur"
+
+    def determiner_position_enemie(self, position_source, position_cible):
+        """Cette méthode détermine la position de la pièce enemie, en assumant que cette position est bien occupée
+
+        :param position_source:
+        :param position_cible:
+        :return:
+            Retourne la position enemie
+        """
+
+        ligne_position_piece = position_source.ligne
+        ligne_position_cible = position_cible.ligne
+
+        colonne_position_piece = position_source.colonne
+        colonne_position_cible = position_cible.colonne
+
+        if ligne_position_piece - ligne_position_cible > 0:
+            ligne_position_enemie = ligne_position_cible + 1
+        else:
+            ligne_position_enemie = ligne_position_piece + 1
+
+        if colonne_position_piece - colonne_position_cible > 0:
+            colonne_position_enemie = colonne_position_cible + 1
+        else:
+            colonne_position_enemie = colonne_position_piece + 1
+
+        # Donc la position de la piece enemie est:
+        position_piece_enemie = Position(ligne_position_enemie, colonne_position_enemie)
+        return position_piece_enemie
     def __repr__(self):
         """Cette méthode spéciale permet de modifier le comportement d'une instance de la classe Damier pour
         l'affichage. Faire un print(un_damier) affichera le damier à l'écran.
