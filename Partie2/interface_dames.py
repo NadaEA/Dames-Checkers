@@ -5,6 +5,8 @@ from Partie2.canvas_damier import CanvasDamier
 from Partie1.partie import Partie
 from Partie1.position import Position
 from Partie1.damier import Damier
+from sys import platform
+
 
 
 
@@ -17,6 +19,7 @@ class FenetrePartie(Tk):
         messages (Label): Un «widget» affichant des messages textes à l'utilisateur du programme
 
         TODO: AJOUTER VOS PROPRES ATTRIBUTS ICI!
+
     """
 
     def __init__(self):
@@ -31,11 +34,17 @@ class FenetrePartie(Tk):
         self.position_source = None
         self.partie = Partie()
 
+        #On va chercher le système d'exploitation pour le clique droit
+        self.systeme_exploitation = platform
+
         # Création du canvas damier.
         self.canvas_damier = CanvasDamier(self, self.partie.damier, 60)
         self.canvas_damier.grid(sticky=NSEW)
         self.canvas_damier.bind('<Button-1>', self.selectionner)
-        self.canvas_damier.bind('<Button-3>', self.deplacer)
+        if self.systeme_exploitation == "darwin":#Si on est en Mac
+            self.canvas_damier.bind('<Button-2>', self.deplacer)
+        else:#Si on est sur Windows
+            self.canvas_damier.bind('<Button-3>', self.deplacer)
 
         # Enregistrer la position de la pièce sélectionnée
         self.piece_selectionnee = self.selectionner
@@ -57,6 +66,7 @@ class FenetrePartie(Tk):
         # Truc pour le redimensionnement automatique des éléments de la fenêtre.
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
+
 
     def selectionner(self, event):
         """Méthode qui gère le clic de souris sur le damier.
@@ -92,17 +102,26 @@ class FenetrePartie(Tk):
             event (tkinter.Event): Objet décrivant l'évènement qui a causé l'appel de la méthode.
 
         """
+
         ligne = event.y // self.canvas_damier.n_pixels_par_case
         colonne = event.x // self.canvas_damier.n_pixels_par_case
         position = Position(ligne, colonne)
-        self.canvas_damier.damier.deplacer(self.position_source, position)
-        self.canvas_damier.actualiser()
+        piece = self.partie.damier.recuperer_piece_a_position(position)
+        if piece is None:
+            self.partie.damier.deplacer(self.position_source, position)
+            self.canvas_damier.damier.deplacer(self.position_source, position)
+            self.canvas_damier.actualiser()
+            self.messages['foreground'] = 'black'
+            self.messages['text'] = 'Clic droit.'
+
+        # self.canvas_damier.damier.deplacer(self.position_source, position)
+        # self.canvas_damier.actualiser()
 
 
 
         # TODO: À continuer....
         #self.canvas_damier.bind('<Button-1>', self.selectionner)
-        self.canvas_damier.actualiser()
+        # self.canvas_damier.actualiser()
         #self.canvas_damier.bind('<Button-1>', self.deplacer(event))
 
     def jouer(self):
