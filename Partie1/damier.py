@@ -4,7 +4,6 @@ from Partie1.piece import Piece
 from Partie1.position import Position
 
 
-
 class Damier:
     """Plateau de jeu d'un jeu de dames. Contient un ensemble de pièces positionnées à une certaine position
     sur le plateau.
@@ -154,7 +153,6 @@ class Damier:
             bool: True si la pièce peut sauter vers la position cible, False autrement.
 
         """
-        global position_piece_enemi
         piece = self.recuperer_piece_a_position(position_piece)
 
         # D'abord on vérifie que la position en question est occupée par une pièce:
@@ -217,6 +215,7 @@ class Damier:
         # Si une des positions possibles est disponible on return True
         for elem in liste_positions_possibles:
             if self.piece_peut_se_deplacer_vers(position_piece, elem):
+                print(peut_se_deplacer)
                 peut_se_deplacer = True
 
         return peut_se_deplacer
@@ -242,12 +241,8 @@ class Damier:
         peut_faire_une_prise = False
         # Si une des positions possibles est disponible on return True
         for element in liste_positions_possibles:
-            if self.piece_peut_sauter_vers(position_piece, element):
-                #case_saut = self.recuperer_piece_a_position(element)
-                #if case_saut is None :
-                   # peut_faire_une_prise = False
-                #else:
-                    peut_faire_une_prise = True
+            if self.piece_peut_sauter_vers(position_piece, element) and self.recuperer_piece_a_position(element) is None:
+                peut_faire_une_prise = True
         return peut_faire_une_prise
 
     def piece_de_couleur_peut_se_deplacer(self, couleur):
@@ -288,7 +283,6 @@ class Damier:
             piece = self.recuperer_piece_a_position(position)
             if piece.couleur == couleur:
                 if self.piece_peut_faire_une_prise(position):
-
                     return True
 
         return False
@@ -331,7 +325,6 @@ class Damier:
                     if verification:
                         self.cases[position_cible] = self.cases[position_source]
                         del self.cases[position_source]
-                        del self.cases[verification[1]]
                         return "prise"
                     else:
                         # On vérifie que c'est  un déplacer sans prise
@@ -447,9 +440,9 @@ if __name__ == "__main__":
     #assert not un_damier.piece_peut_faire_une_prise(Position(1, 0)) == False
 
     # Tests unitaires de piece_de_couleur_peut_se_deplacer
-   # assert un_damier.piece_de_couleur_peut_se_deplacer("blanc") == True
-   # assert un_damier.piece_de_couleur_peut_se_deplacer("noir") == True
-   # assert not un_damier.piece_de_couleur_peut_se_deplacer("blanc") == False
+    assert un_damier.piece_de_couleur_peut_se_deplacer("blanc") == True
+    assert un_damier.piece_de_couleur_peut_se_deplacer("noir") == True
+    assert not un_damier.piece_de_couleur_peut_se_deplacer("blanc") == False
 
     # Tests unitaires de piece_de_couleur_peut_faire_une_prise
    # assert un_damier.piece_de_couleur_peut_faire_une_prise("blanc") == True

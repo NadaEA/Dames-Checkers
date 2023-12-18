@@ -101,6 +101,9 @@ class FenetrePartie(Tk):
 
 
         # TODO: À continuer....
+        #self.canvas_damier.bind('<Button-1>', self.selectionner)
+        self.canvas_damier.actualiser()
+        #self.canvas_damier.bind('<Button-1>', self.deplacer(event))
 
     def jouer(self):
         """Méthode permettant de proprement lancer la partie grâce à un bouton

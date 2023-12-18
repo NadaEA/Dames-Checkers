@@ -21,7 +21,6 @@ class Partie:
             forcée.
 
     """
-
     def __init__(self):
         """Constructeur de la classe Partie. Initialise les attributs à leur valeur par défaut. Le damier est construit
         avec les pièces à leur valeur initiales, le joueur actif est le joueur blanc, et celui-ci n'est pas forcé
@@ -95,7 +94,8 @@ class Partie:
 
         return validite, message_erreur
 
-        # TODO: À compléter
+
+        #TODO: À compléter
 
     def position_cible_valide(self, position_cible):
         """Vérifie si la position cible est valide (en fonction de la position source sélectionnée). Doit non seulement
@@ -189,7 +189,7 @@ class Partie:
             position_cible_valide = self.position_cible_valide(position_cible)
             print(self.position_cible_valide(position_cible)[1])
 
-        # On retourne les deux positions
+        #On retourne les deux positions
         return position_source, position_cible
 
     def tour(self):
@@ -267,6 +267,7 @@ class Partie:
 if __name__ == "__main__":
     une_partie = Partie()
     le_damier = une_partie.damier
+    print(le_damier)
 
     # Tests unitaires
     position = Position(1, 0)
@@ -276,6 +277,11 @@ if __name__ == "__main__":
     assert une_partie.position_source_valide(position_2) == (False, "La position ne contient aucune pièce!")
     une_partie.position_source_selectionnee = Position(1, 0)
 
+    #Pour des tests
+    # le_damier.deplacer(Position(5,0), Position(4,1))
+    # print(le_damier)
+    # le_damier.deplacer(Position(4, 1), Position(3, 2))
+    # print(le_damier)
     # positions = une_partie.demander_positions_deplacement()   # Input 5, 0, 4, 1
     # assert positions == (Position(5,0), Position(4,1))
 
