@@ -21,6 +21,7 @@ class Partie:
             forcée.
 
     """
+
     def __init__(self):
         """Constructeur de la classe Partie. Initialise les attributs à leur valeur par défaut. Le damier est construit
         avec les pièces à leur valeur initiales, le joueur actif est le joueur blanc, et celui-ci n'est pas forcé
@@ -32,6 +33,7 @@ class Partie:
         self.doit_prendre = False
         self.position_source_selectionnee = None
         self.position_source_forcee = None
+        self.double_prise_possible = False
 
     def position_source_valide(self, position_source):
         """Vérifie la validité de la position source, notamment:
@@ -94,8 +96,7 @@ class Partie:
 
         return validite, message_erreur
 
-
-        #TODO: À compléter
+        # TODO: À compléter
 
     def position_cible_valide(self, position_cible):
         """Vérifie si la position cible est valide (en fonction de la position source sélectionnée). Doit non seulement
@@ -116,6 +117,7 @@ class Partie:
                 self.position_source_selectionnee):  # Est-ce que la pièce peut faire une prise?
             if self.damier.piece_peut_sauter_vers(self.position_source_selectionnee,
                                                   position_cible):  # La pièce peut faire une prise, est-ce que la position cible est une prise possible?
+                self.double_prise_possible = True
                 return True, "La position cible est valide et c'est une prise"
             else:
                 return False, "La pièce doit prendre une pièce mais la position cible n'est pas valide"
@@ -142,13 +144,12 @@ class Partie:
                 try:
                     ligne_source = int(input("Entrez la ligne: "))
                     error = True
-                    if ligne_source not in range(0,8):
+                    if ligne_source not in range(0, 8):
                         raise ValueError("Entrez une valeur numérique entre 0 et 7 s'il vous plaît")
                 except ValueError:
                     print("Entrez une valeur numérique entre 0 et 7 s'il vous plaît")
                     error = False
             return ligne_source
-
 
         def colonne_valide():
             error = False
@@ -156,7 +157,7 @@ class Partie:
                 try:
                     colonne_source = int(input("Entrez la colonne: "))
                     error = True
-                    if colonne_source not in range(0,8):
+                    if colonne_source not in range(0, 8):
                         raise ValueError("Entrez une valeur numérique entre 0 et 7 s'il vous plaît")
                 except ValueError:
                     print("Entrez une valeur numérique entre 0 et 7 s'il vous plaît")
@@ -193,7 +194,7 @@ class Partie:
             position_cible_valide = self.position_cible_valide(position_cible)
             print(self.position_cible_valide(position_cible)[1])
 
-        #On retourne les deux positions
+        # On retourne les deux positions
         return position_source, position_cible
 
     def tour(self):
@@ -236,22 +237,20 @@ class Partie:
 
         self.damier.deplacer(position_source, position_cible)
 
-
-
         # Mettre à jour les attributs de la classe
 
-        if self.position_cible_valide(position_cible)[1] == "Le déplacement est valide":
-            print(self.position_cible_valide(position_cible)[1])
-            self.doit_prendre = False
+        # if self.position_cible_valide(position_cible)[1] == "Le déplacement est valide":
+        #   print(self.position_cible_valide(position_cible)[1])
+        #    self.doit_prendre = False
 
-        else:
-            if self.damier.piece_de_couleur_peut_faire_une_prise(self.couleur_joueur_courant):
-                self.doit_prendre = True
-                print("==", self.damier.piece_de_couleur_peut_faire_une_prise(self.couleur_joueur_courant))
-                return
-
-
-
+        # else:
+        #   if self.damier.piece_de_couleur_peut_faire_une_prise(self.couleur_joueur_courant):
+        #       self.doit_prendre = True
+        #        print("==", self.damier.piece_de_couleur_peut_faire_une_prise(self.couleur_joueur_courant))
+        #        return
+        if self.damier.piece_de_couleur_peut_faire_une_prise(
+                self.couleur_joueur_courant) and self.double_prise_possible == True:
+            return
 
         if self.couleur_joueur_courant == "blanc":
             self.couleur_joueur_courant = "noir"
@@ -259,6 +258,7 @@ class Partie:
             self.couleur_joueur_courant = "blanc"
 
         self.doit_prendre = False
+        self.double_prise_possible = False
 
         # TODO: À compléter
 
@@ -293,7 +293,7 @@ if __name__ == "__main__":
     assert une_partie.position_source_valide(position_2) == (False, "La position ne contient aucune pièce!")
     une_partie.position_source_selectionnee = Position(1, 0)
 
-    #Pour des tests
+    # Pour des tests
     # le_damier.deplacer(Position(5,0), Position(4,1))
     # print(le_damier)
     # le_damier.deplacer(Position(4, 1), Position(3, 2))
