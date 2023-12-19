@@ -229,8 +229,6 @@ class Partie:
         position_source = positions[0]
         position_cible = positions[1]
 
-
-
         # Effectuer le déplacement (à l'aide de la méthode du damier appropriée)
 
         self.damier.deplacer(position_source, position_cible)

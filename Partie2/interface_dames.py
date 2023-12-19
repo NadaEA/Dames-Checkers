@@ -8,8 +8,6 @@ from Partie1.damier import Damier
 from sys import platform
 
 
-
-
 class FenetrePartie(Tk):
     """Interface graphique de la partie de dames.
 
@@ -32,28 +30,33 @@ class FenetrePartie(Tk):
 
         # La partie
         self.position_source = None
+        self.position_cible = None
+        self.validite = False
         self.partie = Partie()
 
-        #On va chercher le système d'exploitation pour le clique droit
+        # On va chercher le système d'exploitation pour le clique droit
         self.systeme_exploitation = platform
 
         # Création du canvas damier.
         self.canvas_damier = CanvasDamier(self, self.partie.damier, 60)
         self.canvas_damier.grid(sticky=NSEW)
         self.canvas_damier.bind('<Button-1>', self.selectionner)
-        if self.systeme_exploitation == "darwin":#Si on est en Mac
+        if self.systeme_exploitation == "darwin":  # Si on est en Mac
             self.canvas_damier.bind('<Button-2>', self.deplacer)
-        else:#Si on est sur Windows
+        else:  # Si on est sur Windows
             self.canvas_damier.bind('<Button-3>', self.deplacer)
 
         # Enregistrer la position de la pièce sélectionnée
         self.piece_selectionnee = self.selectionner
 
+        # Faire passer le deplacement
+        self.piece_deplacer = self.deplacer
+
         # Convertir les inputs de demander_position_deplacement en clics de souris
-        #self.partie.demander_positions_deplacement = self.selectionner
+        self.partie.demander_positions_deplacement = self.selectionner
 
         # Création des boutons pour la partie
-        self.button_start = Button(self, text="Commencer la partie", command=self.jouer)
+        self.button_start = Button(self, text="Commencer la partie", command=self.jouer_interface)
         self.button_start.grid()
 
         # Ajout d'une étiquette d'information.
@@ -66,7 +69,6 @@ class FenetrePartie(Tk):
         # Truc pour le redimensionnement automatique des éléments de la fenêtre.
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-
 
     def selectionner(self, event):
         """Méthode qui gère le clic de souris sur le damier.
@@ -90,9 +92,20 @@ class FenetrePartie(Tk):
         else:
             self.messages['foreground'] = 'black'
             self.messages['text'] = (
-            'Pièce sélectionnée à la position {}.'.format(position), '.Clic droit sur une case pour déplacer')
+                'Pièce sélectionnée à la position {}.'.format(position), '.Clic droit sur une case pour déplacer')
 
-        self.position_source = position
+        if self.partie.position_source_valide(position)[0] == True:
+            self.position_source = position
+            self.partie.position_source_selectionnee = position
+            self.validite = True
+            print(self.partie.position_source_valide(position))
+            return
+
+        print(self.partie.position_source_valide(position))
+        self.validite = False
+        return
+
+
 
 
     def deplacer(self, event):
@@ -102,41 +115,43 @@ class FenetrePartie(Tk):
             event (tkinter.Event): Objet décrivant l'évènement qui a causé l'appel de la méthode.
 
         """
-
-        ligne = event.y // self.canvas_damier.n_pixels_par_case
-        colonne = event.x // self.canvas_damier.n_pixels_par_case
-        position = Position(ligne, colonne)
-        piece = self.partie.damier.recuperer_piece_a_position(position)
-        if piece is None:
-            self.partie.damier.deplacer(self.position_source, position)
-            self.canvas_damier.damier.deplacer(self.position_source, position)
-            self.canvas_damier.actualiser()
-            self.messages['foreground'] = 'black'
-            self.messages['text'] = 'Clic droit.'
-
-        # self.canvas_damier.damier.deplacer(self.position_source, position)
-        # self.canvas_damier.actualiser()
+        if self.validite is not False:
+            ligne = event.y // self.canvas_damier.n_pixels_par_case
+            colonne = event.x // self.canvas_damier.n_pixels_par_case
+            position = Position(ligne, colonne)
+            piece = self.partie.damier.recuperer_piece_a_position(position)
+            if piece is None :
+                self.position_cible = position
+                self.jouer_suite_au_clic(self.position_source, self.position_cible)
+        return
 
 
 
-        # TODO: À continuer....
-        #self.canvas_damier.bind('<Button-1>', self.selectionner)
-        # self.canvas_damier.actualiser()
-        #self.canvas_damier.bind('<Button-1>', self.deplacer(event))
-
-    def jouer(self):
-        """Méthode permettant de proprement lancer la partie grâce à un bouton
-        """
-
-
+    def jouer_interface(self):
         self.button_start.destroy()
+        # self.canvas_damier.actualiser()
+
+    def jouer_suite_au_clic(self, position_source, position_cible):
+
+        # On vérifie si le joueur doit faire une prise
+        if self.partie.damier.piece_de_couleur_peut_faire_une_prise(self.partie.couleur_joueur_courant):
+            self.partie.doit_prendre = True
+
+        # On valide les positions
+
+        self.partie.position_cible_valide(position_cible)
+
+        # On fait le déplacement
+        self.partie.damier.deplacer(position_source, position_cible)
+        self.canvas_damier.damier.deplacer(position_source, position_cible)
+        self.canvas_damier.actualiser()
         self.messages['foreground'] = 'black'
-        self.messages['text'] = ('Faites un clic gauche sur une pièce pour la sélectionner :).')
+        self.messages['text'] = 'Clic droit.'
 
-
-
-        #self.canvas_damier.actualiser()
-        #self.partie.jouer()
+        if self.partie.couleur_joueur_courant == "blanc":
+            self.partie.couleur_joueur_courant = "noir"
+        else:
+            self.partie.couleur_joueur_courant = "blanc"
 
 
 
