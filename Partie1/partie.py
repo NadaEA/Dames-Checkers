@@ -78,7 +78,8 @@ class Partie:
 
         if i == 24 and validite == False:
             return validite, "La position ne contient aucune pièce!"
-
+        if self.damier.recuperer_piece_a_position(position_source) is None:
+            return False, "La position ne contient aucune pièce!"
         # On compare la couleur du joueur courant avec la couleur de la pièce pour déterminer la validité
         if self.damier.cases[position_source].couleur != self.couleur_joueur_courant:
             validite = False
