@@ -142,6 +142,8 @@ class Partie:
                 try:
                     ligne_source = int(input("Entrez la ligne: "))
                     error = True
+                    if ligne_source not in range(0,8):
+                        raise ValueError("Entrez une valeur numérique entre 0 et 7 s'il vous plaît")
                 except ValueError:
                     print("Entrez une valeur numérique entre 0 et 7 s'il vous plaît")
                     error = False
@@ -154,6 +156,8 @@ class Partie:
                 try:
                     colonne_source = int(input("Entrez la colonne: "))
                     error = True
+                    if colonne_source not in range(0,8):
+                        raise ValueError("Entrez une valeur numérique entre 0 et 7 s'il vous plaît")
                 except ValueError:
                     print("Entrez une valeur numérique entre 0 et 7 s'il vous plaît")
                     error = False
@@ -224,7 +228,6 @@ class Partie:
 
         # Demander les positions
 
-
         positions = self.demander_positions_deplacement()
         position_source = positions[0]
         position_cible = positions[1]
@@ -232,7 +235,12 @@ class Partie:
         # Effectuer le déplacement (à l'aide de la méthode du damier appropriée)
 
         self.damier.deplacer(position_source, position_cible)
-        self.damier.deplacer(self.position_source_forcee, position_cible)
+
+
+
+
+
+
 
 
 
@@ -242,6 +250,8 @@ class Partie:
             self.couleur_joueur_courant = "noir"
         else:
             self.couleur_joueur_courant = "blanc"
+
+        self.doit_prendre = False
 
         # TODO: À compléter
 
