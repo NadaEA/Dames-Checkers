@@ -159,6 +159,10 @@ class Damier:
         if piece is None:
             return False
 
+        # Ensuite on vérifie que la position cible est bien dans le damier:
+        if not self.position_est_dans_damier(position_cible):
+            return False
+
         # Ensuite on s'assure que la position cible est bien un saut possible
         if position_cible not in position_piece.quatre_positions_sauts():
             return False
