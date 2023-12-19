@@ -50,7 +50,7 @@ class FenetrePartie(Tk):
         self.piece_selectionnee = self.selectionner
 
         # Convertir les inputs de demander_position_deplacement en clics de souris
-        self.partie.demander_positions_deplacement = self.selectionner
+        #self.partie.demander_positions_deplacement = self.selectionner
 
         # Création des boutons pour la partie
         self.button_start = Button(self, text="Commencer la partie", command=self.jouer)
@@ -128,8 +128,15 @@ class FenetrePartie(Tk):
         """Méthode permettant de proprement lancer la partie grâce à un bouton
         """
 
+
         self.button_start.destroy()
+        self.messages['foreground'] = 'black'
+        self.messages['text'] = ('Faites un clic gauche sur une pièce pour la sélectionner :).')
+
+
+
         #self.canvas_damier.actualiser()
-        self.partie.jouer()
+        #self.partie.jouer()
+
 
 

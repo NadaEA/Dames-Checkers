@@ -224,6 +224,7 @@ class Partie:
 
         # Demander les positions
 
+
         positions = self.demander_positions_deplacement()
         position_source = positions[0]
         position_cible = positions[1]
