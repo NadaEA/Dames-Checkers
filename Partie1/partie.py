@@ -238,13 +238,20 @@ class Partie:
 
 
 
-
-
-
-
-
-
         # Mettre à jour les attributs de la classe
+
+        if self.position_cible_valide(position_cible)[1] == "Le déplacement est valide":
+            print(self.position_cible_valide(position_cible)[1])
+            self.doit_prendre = False
+
+        else:
+            if self.damier.piece_de_couleur_peut_faire_une_prise(self.couleur_joueur_courant):
+                self.doit_prendre = True
+                print("==", self.damier.piece_de_couleur_peut_faire_une_prise(self.couleur_joueur_courant))
+                return
+
+
+
 
         if self.couleur_joueur_courant == "blanc":
             self.couleur_joueur_courant = "noir"
