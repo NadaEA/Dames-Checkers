@@ -172,14 +172,12 @@ class Partie:
         position_source = Position(ligne_source, colonne_source)
         self.position_source_selectionnee = position_source
         position_source_valide = self.position_source_valide(position_source)
-        print(self.position_source_valide(position_source)[1])
         while not position_source_valide[0]:
             ligne_source = ligne_valide()
             colonne_source = colonne_valide()
             position_source = Position(ligne_source, colonne_source)
             self.position_source_selectionnee = position_source
             position_source_valide = self.position_source_valide(position_source)
-            print(self.position_source_valide(position_source)[1])
 
         # On demande la position cible
 
@@ -187,13 +185,11 @@ class Partie:
         colonne_cible = colonne_valide()
         position_cible = Position(ligne_cible, colonne_cible)
         position_cible_valide = self.position_cible_valide(position_cible)
-        print(self.position_cible_valide(position_cible)[1])
         while not position_cible_valide[0]:
             ligne_cible = ligne_valide()
             colonne_cible = colonne_valide()
             position_cible = Position(ligne_cible, colonne_cible)
             position_cible_valide = self.position_cible_valide(position_cible)
-            print(self.position_cible_valide(position_cible)[1])
 
         # On retourne les deux positions
         return position_source, position_cible

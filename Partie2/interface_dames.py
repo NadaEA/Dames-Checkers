@@ -47,22 +47,21 @@ class FenetrePartie(Tk):
             self.canvas_damier.bind('<Button-3>', self.deplacer)
 
 
-        # Enregistrer la position de la pièce sélectionnée
-        self.piece_selectionnee = self.selectionner
-
-        # Faire passer le deplacement
-        self.piece_deplacer = self.deplacer
-
-        # Convertir les inputs de demander_position_deplacement en clics de souris
-        #self.partie.demander_positions_deplacement = self.selectionner
 
         # Création des boutons pour la partie
-        self.button_start = Button(self, text="Commencer la partie", command=self.jouer_interface)
-        self.button_start.grid()
-
-        # Ajout d'une étiquette d'information.
+        self.quitter_partie = Button(self, text="Quitter la partie", command=self.quitter_la_partie)
+        self.quitter_partie.grid()
         self.messages = Label(self)
         self.messages.grid()
+        self.button_start = Button(self, text="Commencer une nouvelle partie", command=self.jouer_interface,)
+        self.button_start.grid()
+
+
+        # Ajout du joueur courant
+        self.joueur_courant = Label(self, bg="white",)
+        self.joueur_courant['foreground'] = 'black'
+        self.joueur_courant['text'] = 'Au tour du joueur {}.'.format(self.partie.couleur_joueur_courant)
+        self.joueur_courant.place(relx=0.72,rely=0.87)
 
         # Nom de la fenêtre («title» est une méthode de la classe de base «Tk»)
         self.title("Jeu de dames")
@@ -93,7 +92,7 @@ class FenetrePartie(Tk):
         elif self.partie.position_source_valide(position)[0]:
             self.messages['foreground'] = 'black'
             self.messages['text'] = (
-                'Pièce sélectionnée à la position {}.'.format(position), '.Clic droit sur une case pour déplacer')
+                'Pièce sélectionnée à la position {}.'.format(position), 'Clic droit sur une case pour déplacer')
         elif not self.partie.position_source_valide(position)[0]:
             self.messages['foreground'] = 'black'
             self.messages['text'] = self.partie.position_source_valide(position)[1]
@@ -101,17 +100,17 @@ class FenetrePartie(Tk):
         # On vérifie si la position est valide
         if self.partie.damier.piece_de_couleur_peut_faire_une_prise(self.partie.couleur_joueur_courant):
             self.partie.doit_prendre = True
-            # self.messages['foreground'] = 'black'
-            # self.messages['text'] = self.partie.position_source_valide(position)[1]
-        print(self.partie.damier.piece_de_couleur_peut_faire_une_prise(self.partie.couleur_joueur_courant))
         if self.partie.position_source_valide(position)[0]:
             self.position_source = position
             self.partie.position_source_selectionnee = position
             self.validite = True
-            print(self.partie.position_source_valide(position))
             return
 
-        print(self.partie.position_source_valide(position))
+        # Message de rétroaction
+        if self.partie.position_source_valide(position)[1] == 'Une autre pièce peut faire une prise, fais attention!':
+            self.messages['foreground'] = 'black'
+            self.messages['text'] = self.partie.position_source_valide(position)[1]
+
         self.validite = False
         return
 
@@ -139,18 +138,32 @@ class FenetrePartie(Tk):
         return
 
     def jouer_interface(self):
-        self.button_start.destroy()
+        """Cette méthode permet de lancer une nouvelle partie en appuyant le bouton :
+           Commencer une nouvelle partie
+           """
+
+        self.destroy()
+        fenetre = FenetrePartie()
+        fenetre.mainloop()
+
 
     def jouer_suite_au_clic(self, position_source, position_cible):
+        """Cette méthode est appelé suite au relâchement du clic droit et permet d'effectuer le tour du joueur.
+            Elle met ensuite à jour les attributs de joueur courant et affiche les messages nécessaire à la rétroaction.
+            Finalement, elle vérifie si une double prise et possible.
+
+            Args : position_source (donner par le clic gauche de sélectionner() )
+                   position_cible  (donner par le clic droit de déplacer() )
+            """
 
         # On valide les positions
         try:
             self.partie.position_source_valide(position_source)
             self.partie.position_cible_valide(position_cible)
-            print(self.partie.position_cible_valide(position_cible)[1])
         except:
             print("non")
 
+        # Messages de rétroaction
         if not self.partie.position_source_valide(position_source):
             self.messages['foreground'] = 'black'
             self.messages['text'] = self.partie.position_source_valide(position_source)[1]
@@ -160,12 +173,14 @@ class FenetrePartie(Tk):
             self.messages['text'] = self.partie.position_cible_valide(position_cible)[1]
             return
 
+        if self.partie.position_source_valide(position_source)[1] == 'Une autre pièce peut faire une prise, fais attention!':
+            self.messages['foreground'] = 'black'
+            self.messages['text'] = self.partie.position_source_valide(position_source)[1]
+
         # On fait le déplacement
         self.partie.damier.deplacer(position_source, position_cible)
         self.canvas_damier.damier.deplacer(position_source, position_cible)
         self.canvas_damier.actualiser()
-        # self.messages['foreground'] = 'black'
-        # self.messages['text'] = message
 
         # Mettre à jour les attributs de la classe
         if self.partie.damier.piece_de_couleur_peut_faire_une_prise(
@@ -179,5 +194,10 @@ class FenetrePartie(Tk):
 
         self.partie.doit_prendre = False
         self.partie.double_prise_possible = False
+        self.joueur_courant['foreground'] = 'black'
+        self.joueur_courant['text'] = 'Au tour du joueur {}.'.format(self.partie.couleur_joueur_courant)
 
 
+
+    def quitter_la_partie(self):
+        self.destroy()
