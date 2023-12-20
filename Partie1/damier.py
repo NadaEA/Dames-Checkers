@@ -211,7 +211,7 @@ class Damier:
             bool: True si une pièce est à la position reçue et celle-ci peut se déplacer, False autrement.
 
         """
-        piece = self.recuperer_piece_a_position(position_piece)
+        #piece = self.recuperer_piece_a_position(position_piece)
 
         # Déterminons les 4 positions possibles pour la piece:
         liste_positions_possibles = position_piece.quatre_positions_diagonales()
@@ -238,7 +238,7 @@ class Damier:
             bool: True si une pièce est à la position reçue et celle-ci peut faire une prise. False autrement.
 
         """
-        piece = self.recuperer_piece_a_position(position_piece)
+        #piece = self.recuperer_piece_a_position(position_piece)
 
         # Déterminons les 4 positions possibles pour la piece:
         liste_positions_possibles = position_piece.quatre_positions_sauts()
