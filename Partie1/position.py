@@ -31,11 +31,8 @@ class Position:
 
     def positions_diagonales_bas(self):
         """Retourne une liste contenant les deux positions diagonales bas à partir de la position actuelle.
-
-        Note:
-            Dans cette méthode et les prochaines, vous n'avez pas à valider qu'une position est "valide", car dans le
-            contexte de cette classe toutes les positions (même négatives) sont permises.
-
+        Args:
+            None
         Returns:
             list: La liste des deux positions.
 

@@ -255,11 +255,14 @@ class Partie:
         # TODO: À compléter
 
     def jouer(self):
-        """Démarre une partie. Tant que le joueur courant a des déplacements possibles (utilisez les méthodes
-        appriopriées!), un nouveau tour est joué.
+        """Cette méthode gère le déroulement d'une partie.
+
+        Args:
+            None.
 
         Returns:
-            str: La couleur du joueur gagnant.
+            str: Le nom du gagnant de la partie (blanc ou noir).
+
         """
 
         while self.damier.piece_de_couleur_peut_se_deplacer(self.couleur_joueur_courant) or \
@@ -285,13 +288,34 @@ if __name__ == "__main__":
     assert une_partie.position_source_valide(position_2) == (False, "La position ne contient aucune pièce!")
     une_partie.position_source_selectionnee = Position(1, 0)
 
-    # Pour des tests
-    # le_damier.deplacer(Position(5,0), Position(4,1))
-    # print(le_damier)
-    # le_damier.deplacer(Position(4, 1), Position(3, 2))
-    # print(le_damier)
-    # positions = une_partie.demander_positions_deplacement()   # Input 5, 0, 4, 1
-    # assert positions == (Position(5,0), Position(4,1))
+    #tests unitaires position source valide
+    assert not une_partie.position_source_valide(Position(1, 0)) == (True, "")
+    assert une_partie.position_source_valide(Position(0, 1)) == (False, "Cette pièce ne t'appartient pas!")
+    assert une_partie.position_source_valide(Position(0, 2)) == (False, "La position ne contient aucune pièce!")
+    assert une_partie.position_source_valide(Position(0, 0)) == (False, "La position ne contient aucune pièce!")
+
+    #tests unitaires position cible valide
+
+    assert not une_partie.position_cible_valide(Position(3, 2)) == (True, "Le déplacement est valide")
+    assert une_partie.position_cible_valide(Position(2, 3)) == (False, "La pièce ne peut pas se déplacer")
+    assert not une_partie.position_cible_valide(Position(2, 1)) == (True, "Le déplacement est valide")
+    assert not une_partie.position_cible_valide(Position(4, 1)) == (True, "Le déplacement est valide")
+
+    #tests unitaires demander positions deplacement
+    assert une_partie.demander_positions_deplacement() == (Position(1, 0), Position(2, 1))
+    assert une_partie.demander_positions_deplacement() == (Position(1, 0), Position(2, 1))
+    assert une_partie.demander_positions_deplacement() == (Position(1, 0), Position(2, 1))
+
+    #tests unitaires tour
+    assert une_partie.tour() == None
+
+    #tests unitaires jouer
+    assert une_partie.jouer() == "blanc"
+
+
+
+
+
 
     print("Tests réussis!")
 

@@ -53,14 +53,14 @@ class Damier:
         }
 
     def recuperer_piece_a_position(self, position):
-        """Récupère une pièce dans le damier à partir d'une position.
+        """Retourne la pièce à une certaine position sur le damier. Si aucune pièce n'est à cette position, retourne
+        None.
 
-        Args:
-            position (Position): La position où récupérer la pièce.
+        Args
+            position (Position): La position à vérifier.
 
         Returns:
-            La pièce (de type Piece) à la position reçue en argument, ou None si aucune pièce n'était à cette position.
-
+            Piece: La pièce à la position reçue, ou None si aucune pièce n'est à cette position.
         """
         if position not in self.cases:
             return None
@@ -342,12 +342,14 @@ class Damier:
         return "erreur"
 
     def determiner_position_enemie(self, position_source, position_cible):
-        """Cette méthode détermine la position de la pièce enemie, en assumant que cette position est bien occupée
+        """
+        Cette méthode détermine la position de la pièce enemie qui est prise lors d'un saut.
+        Args:
+            position_source (Position): La position source du saut.
+            position_cible (Position): La position cible du saut.
 
-        :param position_source:
-        :param position_cible:
-        :return:
-            Retourne la position enemie
+        Returns:
+            Position: La position de la pièce enemie qui est prise lors d'un saut.
         """
 
         ligne_position_piece = position_source.ligne
@@ -464,14 +466,15 @@ if __name__ == "__main__":
     assert un_damier.piece_peut_se_deplacer(position_1) == True
 
     # Tests unitaires de piece_peut_faire_une_prise
-    #position_1 = Position(1, 1)
-    #assert un_damier.piece_peut_faire_une_prise(position_1) == False
-   #bool = un_damier.piece_peut_faire_une_prise(Position(2, 1))
-   # print(bool)
-    #assert bool == True
-    #assert un_damier.piece_peut_faire_une_prise(Position(2, 3)) == True
-   # assert un_damier.piece_peut_faire_une_prise(Position(2, 5)) == True
-    #assert not un_damier.piece_peut_faire_une_prise(Position(1, 0)) == False
+    position_1 = Position(0, 1)
+    assert un_damier.piece_peut_faire_une_prise(position_1) == False
+
+    position_1 = Position(2, 3)
+    assert un_damier.piece_peut_faire_une_prise(position_1) == False
+
+    position_1 = Position(6, 5)
+    assert not un_damier.piece_peut_faire_une_prise(position_1) == True
+
 
     # Tests unitaires de piece_de_couleur_peut_se_deplacer
     assert un_damier.piece_de_couleur_peut_se_deplacer("blanc") == True
@@ -479,10 +482,9 @@ if __name__ == "__main__":
     assert not un_damier.piece_de_couleur_peut_se_deplacer("blanc") == False
 
     # Tests unitaires de piece_de_couleur_peut_faire_une_prise
-   # assert un_damier.piece_de_couleur_peut_faire_une_prise("blanc") == True
-   # assert un_damier.piece_de_couleur_peut_faire_une_prise("noir") == True
-  #  assert not un_damier.piece_de_couleur_peut_faire_une_prise("blanc") == False
-
+    assert un_damier.piece_de_couleur_peut_faire_une_prise("blanc") == False
+    assert un_damier.piece_de_couleur_peut_faire_une_prise("noir") == False
+    assert not un_damier.piece_de_couleur_peut_faire_une_prise("blanc") == True
 
 
     # Tests unitaires de deplacer
@@ -511,6 +513,25 @@ if __name__ == "__main__":
     position_1 = Position(2, 1)
     position_2 = Position(3, 2)
     assert un_damier.deplacer(position_1, position_2) == "ok"
+
+    #tests unitaires recuperer_piece_a_position
+    position_1 = Position(2, 1)
+    assert un_damier.recuperer_piece_a_position(position_1) == None
+
+    position_1 = Position(0, 1)
+    assert un_damier.recuperer_piece_a_position(position_1) == Piece("noir", "pion")
+
+    assert un_damier.recuperer_piece_a_position(Position(7, 0)) == Piece("blanc", "pion")
+
+    #tests unitaires determiner_position_enemie
+    position_1 = Position(2, 1)
+    position_2 = Position(4, 3)
+    assert un_damier.determiner_position_enemie(position_1, position_2) == Position(3, 2)
+
+    position_1 = Position(2, 1)
+    position_2 = Position(5, 4)
+    assert un_damier.determiner_position_enemie(position_1, position_2) == Position(3, 2)
+
 
 
     print('Test unitaires passés avec succès !')
