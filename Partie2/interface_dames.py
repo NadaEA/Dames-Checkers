@@ -16,7 +16,6 @@ class FenetrePartie(Tk):
         canvas_damier (CanvasDamier): Le «widget» gérant l'affichage du damier à l'écran
         messages (Label): Un «widget» affichant des messages textes à l'utilisateur du programme
 
-        TODO: AJOUTER VOS PROPRES ATTRIBUTS ICI!
 
     """
 
@@ -43,7 +42,7 @@ class FenetrePartie(Tk):
         self.canvas_damier.bind('<Button-1>', self.selectionner)
         if self.systeme_exploitation == "darwin":  # Si on est en Mac
             self.canvas_damier.bind('<Button-2>', self.deplacer)
-        else:  # Si on est sur Windows
+        else:  # Si on est sur Windows ou Linux
             self.canvas_damier.bind('<Button-3>', self.deplacer)
 
 

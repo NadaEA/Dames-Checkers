@@ -64,7 +64,6 @@ class Partie:
         message_erreur = ""
         i = 0
         validite = True
-        # for keys in Damier.cases:
         # On doit utiliser l'objet de la classe Damier qu'on instantie à l'intérieur de la classe Partie, sinon si tu essaie d'accéder à la classe Damier
         # à travers le nom de la classe et pas un objet de la classe damier, tu reçois une erreur comme quoi les attributs sont pas trouvables (parce qu'ils
         # ont pas été crées parce qu'on a pas d'instance de damier dans ce cas là
@@ -97,7 +96,6 @@ class Partie:
 
         return validite, message_erreur
 
-        # TODO: À compléter
 
     def position_cible_valide(self, position_cible):
         """Vérifie si la position cible est valide (en fonction de la position source sélectionnée). Doit non seulement
@@ -248,7 +246,6 @@ class Partie:
         self.doit_prendre = False
         self.double_prise_possible = False
 
-        # TODO: À compléter
 
     def jouer(self):
         """Cette méthode gère le déroulement d'une partie.

@@ -211,7 +211,6 @@ class Damier:
             bool: True si une pièce est à la position reçue et celle-ci peut se déplacer, False autrement.
 
         """
-        #piece = self.recuperer_piece_a_position(position_piece)
 
         # Déterminons les 4 positions possibles pour la piece:
         liste_positions_possibles = position_piece.quatre_positions_diagonales()
@@ -238,7 +237,6 @@ class Damier:
             bool: True si une pièce est à la position reçue et celle-ci peut faire une prise. False autrement.
 
         """
-        #piece = self.recuperer_piece_a_position(position_piece)
 
         # Déterminons les 4 positions possibles pour la piece:
         liste_positions_possibles = position_piece.quatre_positions_sauts()
@@ -335,7 +333,6 @@ class Damier:
                             self.cases[position_source].promouvoir()
                         del self.cases[position_enemie]
                         self.cases[position_cible] = self.cases[position_source]
-                        #print(self.cases[position_cible].type_de_piece)
                         del self.cases[position_source]
                         return "prise"
                     else:
@@ -346,7 +343,6 @@ class Damier:
                             elif piece_position_source.est_noire() and position_cible.ligne == 7:
                                 self.cases[position_source].promouvoir()
                             self.cases[position_cible] = self.cases[position_source]
-                            #print(self.cases[position_cible].type_de_piece)
                             del self.cases[position_source]
                             return "ok"
 
@@ -405,8 +401,6 @@ if __name__ == "__main__":
 
     un_damier = Damier()
 
-    # TODO: À compléter
-
     # tests unitaires de position_est_dans_damier
     position_1 = Position(-2, -3)
     assert un_damier.position_est_dans_damier(position_1) == False
@@ -461,7 +455,6 @@ if __name__ == "__main__":
     position_1 = Position(0, 1)
     position_2 = Position(3, 2)
     assert un_damier.piece_peut_sauter_vers(position_1, position_2) == False
-    ####Probablement faire d'autres tests quand on pourra bouger!#########
 
     # Tests unitaires de piece_peut_se_deplacer
     position_1 = Position(0, 1)

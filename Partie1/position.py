@@ -76,8 +76,6 @@ class Position:
                ,Position(self.ligne + 2, self.colonne - 2), Position(self.ligne + 2, self.colonne + 2)]
 
 
-###################################################### Jérémie ##################################################
-
     def __eq__(self, other):
         """Méthode spéciale indiquant à Python comment vérifier si deux positions sont égales. On compare simplement
         la ligne et la colonne de l'objet actuel et de l'autre objet.
