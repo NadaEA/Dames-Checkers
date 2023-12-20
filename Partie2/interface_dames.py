@@ -90,14 +90,19 @@ class FenetrePartie(Tk):
         if piece is None:
             self.messages['foreground'] = 'red'
             self.messages['text'] = 'Erreur: Aucune pièce à cet endroit.'
-        else:
+        elif self.partie.position_source_valide(position)[0]:
             self.messages['foreground'] = 'black'
             self.messages['text'] = (
                 'Pièce sélectionnée à la position {}.'.format(position), '.Clic droit sur une case pour déplacer')
+        elif not self.partie.position_source_valide(position)[0]:
+            self.messages['foreground'] = 'black'
+            self.messages['text'] = self.partie.position_source_valide(position)[1]
 
         # On vérifie si la position est valide
         if self.partie.damier.piece_de_couleur_peut_faire_une_prise(self.partie.couleur_joueur_courant):
             self.partie.doit_prendre = True
+            # self.messages['foreground'] = 'black'
+            # self.messages['text'] = self.partie.position_source_valide(position)[1]
         print(self.partie.damier.piece_de_couleur_peut_faire_une_prise(self.partie.couleur_joueur_courant))
         if self.partie.position_source_valide(position)[0]:
             self.position_source = position
@@ -142,15 +147,25 @@ class FenetrePartie(Tk):
         try:
             self.partie.position_source_valide(position_source)
             self.partie.position_cible_valide(position_cible)
+            print(self.partie.position_cible_valide(position_cible)[1])
         except:
             print("non")
+
+        if not self.partie.position_source_valide(position_source):
+            self.messages['foreground'] = 'black'
+            self.messages['text'] = self.partie.position_source_valide(position_source)[1]
+
+        if not self.partie.position_cible_valide(position_cible)[0]:
+            self.messages['foreground'] = 'black'
+            self.messages['text'] = self.partie.position_cible_valide(position_cible)[1]
+            return
 
         # On fait le déplacement
         self.partie.damier.deplacer(position_source, position_cible)
         self.canvas_damier.damier.deplacer(position_source, position_cible)
         self.canvas_damier.actualiser()
-        self.messages['foreground'] = 'black'
-        self.messages['text'] = 'Clic droit.'
+        # self.messages['foreground'] = 'black'
+        # self.messages['text'] = message
 
         # Mettre à jour les attributs de la classe
         if self.partie.damier.piece_de_couleur_peut_faire_une_prise(

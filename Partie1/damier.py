@@ -211,7 +211,7 @@ class Damier:
             bool: True si une pièce est à la position reçue et celle-ci peut se déplacer, False autrement.
 
         """
-        piece = self.recuperer_piece_a_position(position_piece)
+        #piece = self.recuperer_piece_a_position(position_piece)
 
         # Déterminons les 4 positions possibles pour la piece:
         liste_positions_possibles = position_piece.quatre_positions_diagonales()
@@ -238,7 +238,7 @@ class Damier:
             bool: True si une pièce est à la position reçue et celle-ci peut faire une prise. False autrement.
 
         """
-        piece = self.recuperer_piece_a_position(position_piece)
+        #piece = self.recuperer_piece_a_position(position_piece)
 
         # Déterminons les 4 positions possibles pour la piece:
         liste_positions_possibles = position_piece.quatre_positions_sauts()
@@ -297,7 +297,7 @@ class Damier:
         été prise).
 
         Cette méthode doit également:
-        - Promouvoir un pion en dame si celui-ci atteint l'autre extrémité du plateau. #Pas sur de comprendre (Bamba)
+        - Promouvoir un pion en dame si celui-ci atteint l'autre extrémité du plateau.
         - Retourner un message indiquant "ok", "prise" ou "erreur".
 
         ATTENTION: Si le déplacement est effectué, cette méthode doit retourner "ok" si aucune prise n'a été faite,
@@ -314,7 +314,8 @@ class Damier:
                 "erreur" autrement.
 
         """
-        # TODO: À compléter
+        piece_position_source = self.recuperer_piece_a_position(position_source)
+
         # On vérifie que la position source est bien occupée
         if self.recuperer_piece_a_position(position_source) is not None:
 
@@ -328,14 +329,24 @@ class Damier:
                     verification = self.piece_peut_sauter_vers(position_source, position_cible)
                     if verification:
                         position_enemie = self.determiner_position_enemie(position_source, position_cible)
+                        if piece_position_source.est_blanche() and position_cible.ligne == 0:
+                            self.cases[position_source].promouvoir()
+                        elif piece_position_source.est_noire() and position_cible.ligne == 7:
+                            self.cases[position_source].promouvoir()
                         del self.cases[position_enemie]
                         self.cases[position_cible] = self.cases[position_source]
+                        #print(self.cases[position_cible].type_de_piece)
                         del self.cases[position_source]
                         return "prise"
                     else:
-                        # On vérifie que c'est  un déplacer sans prise
+                        # Si ce n'est pas une prise, mais juste un déplacement
                         if self.piece_peut_se_deplacer_vers(position_source, position_cible):
+                            if piece_position_source.est_blanche() and position_cible.ligne == 0:
+                                self.cases[position_source].promouvoir()
+                            elif piece_position_source.est_noire() and position_cible.ligne == 7:
+                                self.cases[position_source].promouvoir()
                             self.cases[position_cible] = self.cases[position_source]
+                            #print(self.cases[position_cible].type_de_piece)
                             del self.cases[position_source]
                             return "ok"
 
