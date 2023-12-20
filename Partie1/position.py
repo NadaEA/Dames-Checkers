@@ -108,6 +108,8 @@ if __name__ == '__main__':
     #test_unitaire de positions_diagonales_bas
     position_1 = Position(0,1)
     assert Position(1,0).positions_diagonales_bas() == [Position(2,-1), Position(2,1)]
+    assert Position(1, 1).positions_diagonales_bas() == [Position(2, 0), Position(2, 2)]
+
 
 
     #test_unitaire de positions_diagonales_haut
@@ -120,6 +122,7 @@ if __name__ == '__main__':
     position_1 = Position(0, 1)
     liste_positions_des_quatres_diagonales = position_1.quatre_positions_diagonales()
     assert liste_positions_des_quatres_diagonales[2].ligne == 1 and liste_positions_des_quatres_diagonales[2].colonne == 0
+    assert liste_positions_des_quatres_diagonales[3].ligne == 1 and liste_positions_des_quatres_diagonales[3].colonne == 2
 
     # test_unitaire de quatre_positions_sauts
     assert Position(2,2).quatre_positions_sauts()[1] == Position(0,4)
