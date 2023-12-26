@@ -1,4 +1,4 @@
-#Game of Checkers!
+# Game of Checkers!
 
 Game of checkers
 
